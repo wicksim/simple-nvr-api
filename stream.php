@@ -1,14 +1,18 @@
 <?php
 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
 // ------------------------------------------------------------
 // Input parameters
 // ------------------------------------------------------------
 
-$cameraName = $_GET['camera-name'] ?? '';
+$camera = $_GET['camera'] ?? '';
 $file = $_GET['file'] ?? '';
 
 // Camera names are restricted to a single safe path component.
-if (!preg_match('/^[A-Za-z0-9_-]+$/', $cameraName)) {
+if (!preg_match('/^[A-Za-z0-9_-]+$/', $camera)) {
     http_response_code(400);
     header('Content-Type: text/plain; charset=utf-8');
     die('Invalid camera name.');
@@ -46,7 +50,7 @@ if (
 // ------------------------------------------------------------
 
 
-$folder = '/volume1/nvr/data/' . $cameraName . '/events/';
+$folder = '/volume1/nvr/data/' . $camera . '/events/';
 $path = $folder . '/' . $file;
 
 if (!is_dir($folder)) {

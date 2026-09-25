@@ -1,17 +1,21 @@
 <?php
 
-$cameraName = $_GET['camera-name'] ?? '';
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+$camera = $_GET['camera'] ?? '';
 
 // Only allow letters, numbers, underscore and hyphen.
 // This deliberately excludes '/', '\', '.', spaces, etc.
-if (!preg_match('/^[A-Za-z0-9_-]+$/', $cameraName)) {
+if (!preg_match('/^[A-Za-z0-9_-]+$/', $camera)) {
     http_response_code(400);
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode(['error' => 'Invalid camera name.']);
     exit;
 }
 
-$folder = '/volume1/nvr/data/' . $cameraName . '/events/';
+$folder = '/volume1/nvr/data/' . $camera . '/events/';
 
 $sinceHours = $_GET['since-hours'] ?? 24;
 if ($sinceHours === '' || !is_numeric($sinceHours) || !is_finite((float) $sinceHours) || (float) $sinceHours < 0) {
